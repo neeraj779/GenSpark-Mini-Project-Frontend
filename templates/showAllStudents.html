@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>students List</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../static/css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark nav-cus">
+      <a class="navbar-brand" href="../home.html"
+        ><i class="fas fa-home"></i> Home</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/showAllstudents.html"
+              ><i class="fas fa-star"></i> See students</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/addstudent.html"
+              ><i class="fas fa-plus"></i> Add student</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/filterstudents.html"
+              ><i class="fas fa-filter"></i> Filter students</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/searchstudent.html"
+              ><i class="fas fa-search"></i> Search student</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/updatestudentDetails.html"
+              ><i class="fas fa-edit"></i> Update student's Record</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./templates/deletestudentDetails.html"
+              ><i class="fas fa-trash"></i> Delete student</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-5">
+      <h1 class="text-center mb-4">All students</h1>
+      <div class="row" id="students-list"></div>
+    </div>
+
+    <script>
+      const token = localStorage.getItem("authToken");
+
+      fetch("http://localhost:5172/api/v1/Student/GetAllStudents", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              "Network response was not ok " + response.statusText
+            );
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const studentList = document.getElementById("students-list");
+          data.forEach((student) => {
+            const studentCard = document.createElement("div");
+            studentCard.className = "col-md-4 mb-4";
+            studentCard.innerHTML = `
+              <div class="card">
+                <div class="card-body">
+                  <img src=".././assets/img/student.jpg" class="card-img-top" alt="student Image" />
+                  <p class="card-title text-center">student Details</p>
+                  <span class="card-text">Name: ${student.fullName}</span><br>
+                  <span class="card-text">Roll No.: ${student.rollno}</span><br>
+                  <span class="card-text">Department.: ${
+                    student.department
+                  }</span><br>
+                  <span class="card-text">Date of Birth: ${new Date(
+                    student.dateOfBirth
+                  ).toLocaleDateString()}</span><br>
+                    <span class="card-text">Gender: ${student.gender}</span><br>
+                  <span class="card-text">Phone: ${student.phone}</span><br>
+                  <span class="card-text">Email: ${student.email}</span>
+                  <span class="card-text">Status: ${student.status}</span>
+                </div>
+              </div>
+            `;
+            studentList.appendChild(studentCard);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching students:", error);
+          const errorMessage = document.createElement("div");
+          errorMessage.className = "alert alert-danger";
+          errorMessage.textContent =
+            "Error fetching students. Please try again later.";
+          document.querySelector(".container").appendChild(errorMessage);
+        });
+    </script>
+  </body>
+</html>
