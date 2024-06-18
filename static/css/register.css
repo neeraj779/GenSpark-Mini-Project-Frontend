@@ -4,25 +4,25 @@ body {
     align-items: center;
     height: 100vh;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    font-family: "Arial", sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
-.login-container {
-    width: 350px;
+.registration-container {
+    width: 400px;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     background-color: white;
     border-radius: 15px;
 }
 
-.login-container h2 {
+.registration-container h2 {
     text-align: center;
     margin-bottom: 1.5rem;
     font-weight: bold;
     color: #343a40;
 }
 
-.register-link {
+.login-link {
     display: block;
     text-align: center;
     margin-top: 1rem;
@@ -31,7 +31,7 @@ body {
     font-weight: 600;
 }
 
-.register-link:hover {
+.login-link:hover {
     text-decoration: underline;
 }
 
