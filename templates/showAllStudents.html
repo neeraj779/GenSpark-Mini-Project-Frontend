@@ -73,7 +73,7 @@
     </div>
 
     <script>
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
 
       fetch("http://localhost:5172/api/v1/Student/GetAllStudents", {
         method: "GET",
@@ -98,10 +98,10 @@
             studentCard.innerHTML = `
               <div class="card">
                 <div class="card-body">
-                  <img src=".././assets/img/student.jpg" class="card-img-top" alt="student Image" />
+                  <img src=".././assets/img/student.png" class="card-img-top" alt="student Image" />
                   <p class="card-title text-center">student Details</p>
                   <span class="card-text">Name: ${student.fullName}</span><br>
-                  <span class="card-text">Roll No.: ${student.rollno}</span><br>
+                  <span class="card-text">Roll No.: ${student.rollNo}</span><br>
                   <span class="card-text">Department.: ${
                     student.department
                   }</span><br>
@@ -110,7 +110,7 @@
                   ).toLocaleDateString()}</span><br>
                     <span class="card-text">Gender: ${student.gender}</span><br>
                   <span class="card-text">Phone: ${student.phone}</span><br>
-                  <span class="card-text">Email: ${student.email}</span>
+                  <span class="card-text">Email: ${student.email}</span><br>
                   <span class="card-text">Status: ${student.status}</span>
                 </div>
               </div>
