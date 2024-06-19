@@ -15,6 +15,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
     <link rel="stylesheet" href="../static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../static/js/crudScript.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark nav-cus">
@@ -67,60 +69,14 @@
         </ul>
       </div>
     </nav>
+
     <div class="container mt-5">
       <h1 class="text-center mb-4">All Teachers</h1>
+      <button class="btn btn-success mb-4" onclick="openAddTeacherModal()">
+        Add New Teacher
+      </button>
       <div class="row" id="teachers-list"></div>
     </div>
-
-    <script>
-      const token = localStorage.getItem("token");
-
-      fetch("http://localhost:5172/api/v1/Teacher/GetAllTeachers", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              "Network response was not ok " + response.statusText
-            );
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const teachersList = document.getElementById("teachers-list");
-          data.forEach((teacher) => {
-            const teacherCard = document.createElement("div");
-            teacherCard.className = "col-md-4 mb-4";
-            teacherCard.innerHTML = `
-              <div class="card">
-                <div class="card-body">
-                  <img src=".././assets/img/teacher.jpg" class="card-img-top" alt="Teacher Image" />
-                  <p class="card-title text-center">Teacher Details</p>
-                  <span class="card-text">Name: ${teacher.fullName}</span><br>
-                  <span class="card-text">Gender: ${teacher.gender}</span><br>
-                  <span class="card-text">Date of Birth: ${new Date(
-                    teacher.dateOfBirth
-                  ).toLocaleDateString()}</span><br>
-                  <span class="card-text">Phone: ${teacher.phone}</span><br>
-                  <span class="card-text">Email: ${teacher.email}</span>
-                </div>
-              </div>
-            `;
-            teachersList.appendChild(teacherCard);
-          });
-        })
-        .catch((error) => {
-          console.error("Error fetching teachers:", error);
-          const errorMessage = document.createElement("div");
-          errorMessage.className = "alert alert-danger";
-          errorMessage.textContent =
-            "Error fetching teachers. Please try again later.";
-          document.querySelector(".container").appendChild(errorMessage);
-        });
-    </script>
+    <script src=".././static/js/teacherScript.js"></script>
   </body>
 </html>

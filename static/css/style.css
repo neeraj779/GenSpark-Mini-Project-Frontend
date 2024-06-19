@@ -140,3 +140,11 @@ input {
     cursor: pointer;
 
 }
+
+
+.edit-btn {
+    border: none;
+    border-radius: 5px;
+    padding-left: 5px;
+    cursor: pointer;
+}
