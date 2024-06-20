@@ -55,7 +55,7 @@
                 if (response.status === 200) {
                   localStorage.setItem("token", data.accessToken);
                   localStorage.setItem("role", data.role);
-                  window.location.href = "home.html";
+                  window.location.href = "../templates/home.html";
                 } else {
                   document.getElementById("error").style.display = "block";
                   document.getElementById("error").innerText =
