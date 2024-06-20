@@ -148,3 +148,19 @@ input {
     padding-left: 5px;
     cursor: pointer;
 }
+
+
+.error {
+    color: red;
+    font-size: 0.875em;
+}
+
+.valid-input {
+    border-color: green;
+    box-shadow: 0 0 6px green;
+}
+
+.invalid-input {
+    border-color: red;
+    box-shadow: 0 0 6px red;
+}

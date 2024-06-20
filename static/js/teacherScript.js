@@ -85,51 +85,79 @@ function openAddTeacherModal() {
     title: "Add New Teacher",
     html: `
       <form id="add-teacher-form">
-        <div class="mb-3">
-          <label for="teacherName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="teacherName" required>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            onblur="validateName()"
+          />
+          <div class="error" id="nameError"></div>
         </div>
-        <div class="mb-3">
+        <div class="form-group">
           <label for="teacherGender" class="form-label">Gender</label>
-          <select class="form-select" id="teacherGender" required>
+          <select class="form-select" id="gender" onblur="validateGender()" required>
+            <option value="None" selected disabled>Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          <div class="error" id="genderError"></div>
         </div>
-        <div class="mb-3">
-          <label for="teacherDOB" class="form-label">Date of Birth</label>
-          <input type="date" class="form-control" id="teacherDOB" required>
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <input
+            type="date"
+            class="form-control"
+            id="dob"
+            name="dob"
+            onblur="validateDOB()"
+          />
+          <div class="error" id="dobError"></div>
         </div>
-        <div class="mb-3">
-          <label for="teacherPhone" class="form-label">Phone</label>
-          <input type="text" class="form-control" id="teacherPhone" required>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            id="phone"
+            name="phone"
+            onblur="validatePhone()"
+          />
+          <div class="error" id="phoneError"></div>
         </div>
-        <div class="mb-3">
-          <label for="teacherEmail" class="form-label">Email</label>
-          <input type="email" class="form-control" id="teacherEmail" required>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            onblur="validateEmail()"
+          />
+          <div class="error" id="emailError"></div>
         </div>
       </form>
     `,
     focusConfirm: false,
     showCancelButton: true,
-    confirmButtonText: "Submit",
+    allowOutsideClick: false,
+    showCloseButton: true,
+    confirmButtonText: "Add Teacher",
     preConfirm: () => {
-      const teacherName = Swal.getPopup().querySelector("#teacherName").value;
-      const teacherGender =
-        Swal.getPopup().querySelector("#teacherGender").value;
-      const teacherDOB = Swal.getPopup().querySelector("#teacherDOB").value;
-      const teacherPhone = Swal.getPopup().querySelector("#teacherPhone").value;
-      const teacherEmail = Swal.getPopup().querySelector("#teacherEmail").value;
+      const popup = Swal.getPopup();
+      const teacherName = popup.querySelector("#name").value;
+      const teacherGender = popup.querySelector("#gender").value;
+      const teacherDOB = popup.querySelector("#dob").value;
+      const teacherPhone = popup.querySelector("#phone").value;
+      const teacherEmail = popup.querySelector("#email").value;
 
-      if (
-        !teacherName ||
-        !teacherGender ||
-        !teacherDOB ||
-        !teacherPhone ||
-        !teacherEmail
-      ) {
-        Swal.showValidationMessage(`Please enter all fields`);
+      if (validateForm() === false) {
+        Swal.showValidationMessage(
+          `Please fix the above errors first before submitting.`
+        );
       }
 
       return {
@@ -148,45 +176,38 @@ function openAddTeacherModal() {
   });
 }
 
-async function addNewTeacher(teacher) {
-  const respons = await fetch(
-    "http://localhost:5172/api/v1/Teacher/RegisterTeacher",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fullName: teacher.teacherName,
-        gender: teacher.teacherGender,
-        dateOfBirth: teacher.teacherDOB,
-        phone: teacher.teacherPhone,
-        email: teacher.teacherEmail,
-      }),
-    }
-  )
+function addNewTeacher(teacher) {
+  fetch("http://localhost:5172/api/v1/Teacher/RegisterTeacher", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fullName: teacher.teacherName,
+      gender: teacher.teacherGender,
+      dateOfBirth: teacher.teacherDOB,
+      phone: teacher.teacherPhone,
+      email: teacher.teacherEmail,
+    }),
+  })
     .then((response) => {
-      response.json().then((data) => {
-        if (response.status === 400) {
-          Swal.fire(
-            "Error",
-            "There was an error adding the teacher. Please try again.",
-            "error"
-          );
-        } else {
-          Swal.fire("Success", "Teacher added successfully!", "success");
-          loadTeachers();
-        }
-      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      Swal.fire("Success", "Teacher added successfully!", "success");
+      loadTeachers();
     })
     .catch((error) => {
       console.error("Error adding teacher:", error);
-      Swal.fire(
-        "Error",
-        "There was an error adding the teacher. Please try again.",
-        "error"
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Oops... we ran into some trouble 🥲",
+        text: "It seems we couldn't add the teacher record. Please try again later. it might be a network issue.",
+      });
     });
 }
 
