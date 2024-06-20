@@ -163,28 +163,6 @@ The Student Management System provides the following features:
 
 ---
 
-<details closed><summary>.</summary>
-
-| File                                                                                             | Summary                                |
-| ------------------------------------------------------------------------------------------------ | -------------------------------------- |
-| [index.html](https://github.com/neeraj779/GenSpark-Mini-Project-Frontend/blob/master/index.html) | HTTP error 401 for prompt `index.html` |
-
-</details>
-
-<details closed><summary>templates</summary>
-</details>
-
-<details closed><summary>auth</summary>
-
-| File                                                                                                        | Summary                                        |
-| ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| [login.html](https://github.com/neeraj779/GenSpark-Mini-Project-Frontend/blob/master/auth/login.html)       | HTTP error 401 for prompt `auth/login.html`    |
-| [register.html](https://github.com/neeraj779/GenSpark-Mini-Project-Frontend/blob/master/auth/register.html) | HTTP error 401 for prompt `auth/register.html` |
-
-</details>
-
----
-
 ## 🚀 Getting Started
 
 ### ⚙️ Installation
