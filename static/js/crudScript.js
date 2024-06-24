@@ -1,12 +1,26 @@
-async function updateEntityField(entityType, entityId, field, DataLoader) {
+async function updateEntityField(entityType, entityId, field, dataLoader) {
   const token = localStorage.getItem("token");
   const url = `http://localhost:5172/api/v1/${entityType}/Update${entityType}${field}`;
 
   return Swal.fire({
     title: `Update ${field}`,
-    input: field === "Email" ? "email" : "text",
-    inputLabel: `Enter new ${field.toLowerCase()}`,
-    inputPlaceholder: `Enter your ${field.toLowerCase()}`,
+    input: field === "Email" ? "email" : field === "Status" ? "select" : "text",
+    inputOptions: {
+      Undergraduate: "Undergraduate",
+      Postgraduate: "Postgraduate",
+      Alumni: "Alumni",
+      Graduated: "Graduated",
+      DroppedOut: "DroppedOut",
+      Expelled: "Expelled",
+      Suspended: "Suspended",
+      Transferred: "Transferred"
+    },
+    inputLabel: `${
+      field === "Status" ? "Select" : "Enter"
+    } new ${field.toLowerCase()}`,
+    inputPlaceholder: `${
+      field === "Status" ? "Select" : "Enter"
+    } your ${field.toLowerCase()}`,
     showCancelButton: true,
     confirmButtonText: `Update ${field}`,
     showLoaderOnConfirm: true,
@@ -36,12 +50,12 @@ async function updateEntityField(entityType, entityId, field, DataLoader) {
         title: `${field} updated to: ${result.value[field.toLowerCase()]}`,
         confirmButtonText: "Ok",
       });
-      DataLoader();
+      dataLoader();
     }
   });
 }
 
-function deleteEntity(entityType, entityId) {
+function deleteEntity(entityType, entityId, dataLoader) {
   const token = localStorage.getItem("token");
   const url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}Record?${entityType.toLowerCase()}Id=${entityId}`;
 
@@ -77,7 +91,7 @@ function deleteEntity(entityType, entityId) {
             icon: "success",
             confirmButtonText: "Ok",
           });
-          loadTeachers();
+          dataLoader();
         })
         .catch((error) => {
           console.error(`Error deleting ${entityType.toLowerCase()}:`, error);
