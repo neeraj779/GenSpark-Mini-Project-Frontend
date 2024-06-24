@@ -3,8 +3,30 @@ const apiUrl = "http://localhost:5172/api/v1/Teacher";
 
 async function fetchApi(url, options = {}) {
   const response = await fetch(url, options);
+
   if (!response.ok) {
-    throw new Error(`Network response was not ok: ${response.statusText}`);
+    switch (response.status) {
+      case 400:
+        displayErrorMessage(
+          "Bad request: The server could not understand the request."
+        );
+        return -1;
+      case 401:
+        displayErrorMessage(
+          "Unauthorized: Authentication is required and has failed or has not yet been provided."
+        );
+        return -1;
+      case 404:
+        displayErrorMessage(
+          "Not found: It seems like there is no data available."
+        );
+        return -1;
+      default:
+        displayErrorMessage(
+          `HTTP error ${response.status}: ${response.statusText}`
+        );
+        return -1;
+    }
   }
   return response.json();
 }
@@ -19,50 +41,68 @@ async function loadTeachers() {
       },
     });
 
-    const teachersList = document.getElementById("teachers-list");
-    teachersList.innerHTML = "";
-    data.forEach(createTeacherCard);
+    if (data !== -1) {
+      const teachersList = document.getElementById("teachers-list");
+      teachersList.innerHTML = "";
+      data.forEach(createTeacherCard);
+    }
   } catch (error) {
     console.error("Error fetching teachers:", error);
     displayErrorMessage("Error fetching teachers. Please try again later.");
   }
 }
 
+function displayErrorMessage(message) {
+  const errorMessage = document.createElement("div");
+  errorMessage.className = "alert alert-info";
+  errorMessage.textContent = message;
+  document.querySelector(".container").appendChild(errorMessage);
+}
+
 function createTeacherCard(teacher) {
   const teacherCard = document.createElement("div");
   teacherCard.className = "col-md-4 mb-4";
-  teacherCard.innerHTML = `
-    <div class="card">
+  teacherCard.innerHTML = `<div class="card">
       <div class="card-body">
-        <img src=".././assets/img/teacher.jpg" class="card-img-top" alt="Teacher Image" />
-        <p class="card-title text-center">Teacher Details</p>
-        <span class="card-text">Name: ${teacher.fullName}</span><br>
-        <span class="card-text">Gender: ${teacher.gender}</span><br>
-        <span class="card-text">Date of Birth: ${new Date(
-          teacher.dateOfBirth
-        ).toLocaleDateString()}</span><br>
+        <img
+          src=".././assets/img/teacher.jpg"
+          class="card-img-top"
+          alt="Teacher Image"
+        />
+        <div class="card__title text-center">${teacher.fullName}</div>
+        <div class="card__subtitle text-center mb-2">Personal Details</div>
+        <span class="card-text">Gender: ${teacher.gender}</span><br />
+        <span class="card-text"
+          >Date of Birth: ${new Date(
+            teacher.dateOfBirth
+          ).toLocaleDateString()}</span
+        ><br />
         <span class="card-text">
           Phone: ${teacher.phone}
-          <a class="edit-btn" onclick="updateTeacherPhone(${
-            teacher.teacherId
-          })">
+          <a
+            class="edit-btn"
+            onclick="updateTeacherPhone(${teacher.teacherId})"
+          >
             <i class="fas fa-edit"></i>
-          </a>
-        </span><br>
+          </a> </span
+        ><br />
         <span class="card-text">
           Email: ${teacher.email}
-          <a class="edit-btn" onclick="updateTeacherEmail(${
-            teacher.teacherId
-          })">
+          <a
+            class="edit-btn"
+            onclick="updateTeacherEmail(${teacher.teacherId})"
+          >
             <i class="fas fa-edit"></i>
-          </a>
-        </span><br>
-        <button class="btn btn-danger mt-2" onclick="deleteTeacher(${
-          teacher.teacherId
-        })">Delete</button>
+          </a> </span
+        >
+        <button
+          class="btn btn-danger"
+          onclick="deleteTeacher(${teacher.teacherId})"
+        >
+          Delete
+        </button>
       </div>
-    </div>
-  `;
+    </div>`;
   document.getElementById("teachers-list").appendChild(teacherCard);
 }
 
@@ -87,13 +127,13 @@ function CreateAddTeacherForm() {
             class="form-control"
             id="name"
             name="name"
-            onblur="validateName()"
+            onblur="validateText('name')"
           />
           <div class="error" id="nameError"></div>
         </div>
         <div class="form-group">
           <label for="teacherGender" class="form-label">Gender</label>
-          <select class="form-select" id="gender" onblur="validateGender()" required>
+          <select class="form-select" id="gender" onblur="validateSelect("gender")" required>
             <option value="None" selected disabled>Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -154,7 +194,7 @@ function openAddTeacherModal() {
       const teacherPhone = popup.querySelector("#phone").value;
       const teacherEmail = popup.querySelector("#email").value;
 
-      if (validateForm() === false) {
+      if (validateForm("teacher") === false) {
         Swal.showValidationMessage(
           `Please fix the above errors first before submitting.`
         );

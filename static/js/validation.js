@@ -12,12 +12,12 @@ function validateField(fieldId, errorId, validationFn, errorMsg) {
   }
 }
 
-function validateName() {
+function validateText(field) {
   validateField(
-    "name",
-    "nameError",
+    field,
+    `${field}Error`,
     (value) => value.trim() !== "",
-    "Name is required."
+    `${field} is required.`
   );
 }
 
@@ -48,21 +48,27 @@ function validateEmail() {
   );
 }
 
-function validateGender() {
+function validateSelect(field) {
   validateField(
-    "gender",
-    "genderError",
+    field,
+    `${field}Error`,
     (value) => value !== "None",
-    "Please select the Gender."
+    `${field} is required.`
   );
 }
 
-function validateForm() {
-  validateName();
+function validateForm(entity) {
+  validateText("name");
   validatePhone();
   validateDOB();
   validateEmail();
-  validateGender();
+  validateSelect("gender");
+
+  if (entity === "student") {
+    validateText("department");
+    validateText("rollno");
+    validateSelect("status");
+  }
 
   const errors = document.querySelectorAll(".error");
   let formValid = true;

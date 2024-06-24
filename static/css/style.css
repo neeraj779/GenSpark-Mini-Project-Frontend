@@ -36,18 +36,28 @@ h1 {
 }
 
 .card-text {
+    display: flex;
+    font-family: 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 500;
     font-size: 1.1rem;
     color: #425675;
-    display: flex;
 }
 
 .card:hover {
     transform: scale(1.05);
 }
 
-.card-title {
-    font-size: 1.2rem;
+.card__title {
+    font-weight: 500;
+    font-size: 18px;
+    color: #000;
+}
+
+.card__subtitle {
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 15px;
+    color: #78858F;
 }
 
 .card-body {
@@ -55,8 +65,9 @@ h1 {
 }
 
 .card-img-top {
-    height: 200px;
+    height: 192px;
     width: 100%;
+    object-fit: fill;
 }
 
 label {
@@ -163,4 +174,12 @@ input {
 .invalid-input {
     border-color: red;
     box-shadow: 0 0 6px red;
+}
+
+.card button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
 }
