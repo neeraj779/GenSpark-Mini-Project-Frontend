@@ -1,71 +1,69 @@
 const token = localStorage.getItem("token");
+const apiUrl = "http://localhost:5172/api/v1/Teacher";
 
-function loadTeachers() {
-  fetch("http://localhost:5172/api/v1/Teacher/GetAllTeachers", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const teachersList = document.getElementById("teachers-list");
-      teachersList.innerHTML = "";
-      data.forEach((teacher) => {
-        const teacherCard = document.createElement("div");
-        teacherCard.className = "col-md-4 mb-4";
-        teacherCard.innerHTML = `
-              <div class="card">
-                <div class="card-body">
-                  <img src=".././assets/img/teacher.jpg" class="card-img-top" alt="Teacher Image" />
-                  <p class="card-title text-center">Teacher Details</p>
-                  <span class="card-text">Name: ${teacher.fullName}</span><br>
-                  <span class="card-text">Gender: ${teacher.gender}</span><br>
-                  <span class="card-text">Date of Birth: ${new Date(
-                    teacher.dateOfBirth
-                  ).toLocaleDateString()}</span>
-                  <br>
-                  <span class="card-text">
-                  Phone: ${teacher.phone}
-                  <a class="edit-btn" onclick="updateTeacherPhone(${
-                    teacher.teacherId
-                  })">
-                  <i class="fas fa-edit"></i>
-                  </a>
-                  </span>
-                  <br>
-                  <span class="card-text">
-                  Email: ${teacher.email} 
-                  <a class="edit-btn" onclick="updateTeacherEmail(${
-                    teacher.teacherId
-                  })">
-                <i class="fas fa-edit"></i>
-                </a>
-                </span>
-                <br>
-                  <button class="btn btn-danger mt-2" onclick="deleteTeacher(${
-                    teacher.teacherId
-                  })">Delete</button>
-                </div>
-              </div>
-            `;
-        teachersList.appendChild(teacherCard);
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching teachers:", error);
-      const errorMessage = document.createElement("div");
-      errorMessage.className = "alert alert-danger";
-      errorMessage.textContent =
-        "Error fetching teachers. Please try again later.";
-      document.querySelector(".container").appendChild(errorMessage);
+async function fetchApi(url, options = {}) {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`Network response was not ok: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+async function loadTeachers() {
+  try {
+    const data = await fetchApi(`${apiUrl}/GetAllTeachers`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
+
+    const teachersList = document.getElementById("teachers-list");
+    teachersList.innerHTML = "";
+    data.forEach(createTeacherCard);
+  } catch (error) {
+    console.error("Error fetching teachers:", error);
+    displayErrorMessage("Error fetching teachers. Please try again later.");
+  }
+}
+
+function createTeacherCard(teacher) {
+  const teacherCard = document.createElement("div");
+  teacherCard.className = "col-md-4 mb-4";
+  teacherCard.innerHTML = `
+    <div class="card">
+      <div class="card-body">
+        <img src=".././assets/img/teacher.jpg" class="card-img-top" alt="Teacher Image" />
+        <p class="card-title text-center">Teacher Details</p>
+        <span class="card-text">Name: ${teacher.fullName}</span><br>
+        <span class="card-text">Gender: ${teacher.gender}</span><br>
+        <span class="card-text">Date of Birth: ${new Date(
+          teacher.dateOfBirth
+        ).toLocaleDateString()}</span><br>
+        <span class="card-text">
+          Phone: ${teacher.phone}
+          <a class="edit-btn" onclick="updateTeacherPhone(${
+            teacher.teacherId
+          })">
+            <i class="fas fa-edit"></i>
+          </a>
+        </span><br>
+        <span class="card-text">
+          Email: ${teacher.email}
+          <a class="edit-btn" onclick="updateTeacherEmail(${
+            teacher.teacherId
+          })">
+            <i class="fas fa-edit"></i>
+          </a>
+        </span><br>
+        <button class="btn btn-danger mt-2" onclick="deleteTeacher(${
+          teacher.teacherId
+        })">Delete</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("teachers-list").appendChild(teacherCard);
 }
 
 function updateTeacherEmail(id) {
@@ -80,11 +78,8 @@ function deleteTeacher(id) {
   deleteEntity("Teacher", id, loadTeachers);
 }
 
-function openAddTeacherModal() {
-  Swal.fire({
-    title: "Add New Teacher",
-    html: `
-      <form id="add-teacher-form">
+function CreateAddTeacherForm() {
+  return `<form id="add-teacher-form">
         <div class="form-group">
           <label for="name">Name</label>
           <input
@@ -139,8 +134,13 @@ function openAddTeacherModal() {
           />
           <div class="error" id="emailError"></div>
         </div>
-      </form>
-    `,
+      </form>`;
+}
+
+function openAddTeacherModal() {
+  Swal.fire({
+    title: "Add New Teacher",
+    html: CreateAddTeacherForm(),
     focusConfirm: false,
     showCancelButton: true,
     allowOutsideClick: false,
@@ -176,39 +176,32 @@ function openAddTeacherModal() {
   });
 }
 
-function addNewTeacher(teacher) {
-  fetch("http://localhost:5172/api/v1/Teacher/RegisterTeacher", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      fullName: teacher.teacherName,
-      gender: teacher.teacherGender,
-      dateOfBirth: teacher.teacherDOB,
-      phone: teacher.teacherPhone,
-      email: teacher.teacherEmail,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      Swal.fire("Success", "Teacher added successfully!", "success");
-      loadTeachers();
-    })
-    .catch((error) => {
-      console.error("Error adding teacher:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops... we ran into some trouble 🥲",
-        text: "It seems we couldn't add the teacher record. Please try again later. it might be a network issue.",
-      });
+async function addNewTeacher(teacher) {
+  try {
+    await fetchApi(`${apiUrl}/RegisterTeacher`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName: teacher.teacherName,
+        gender: teacher.teacherGender,
+        dateOfBirth: teacher.teacherDOB,
+        phone: teacher.teacherPhone,
+        email: teacher.teacherEmail,
+      }),
     });
+    Swal.fire("Success", "Teacher added successfully!", "success");
+    loadTeachers();
+  } catch (error) {
+    console.error("Error adding teacher:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Oops... we ran into some trouble 🥲",
+      text: "It seems we couldn't add the teacher record. Please try again later. it might be a network issue.",
+    });
+  }
 }
 
 loadTeachers();
