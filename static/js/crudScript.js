@@ -13,7 +13,7 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
       DroppedOut: "DroppedOut",
       Expelled: "Expelled",
       Suspended: "Suspended",
-      Transferred: "Transferred"
+      Transferred: "Transferred",
     },
     inputLabel: `${
       field === "Status" ? "Select" : "Enter"
@@ -45,9 +45,11 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
     },
     allowOutsideClick: () => !Swal.isLoading(),
   }).then((result) => {
+    let updatedField = field.toLowerCase();
+    if (field === "CreditHours") updatedField = "courseCredit";
     if (result.isConfirmed) {
       Swal.fire({
-        title: `${field} updated to: ${result.value[field.toLowerCase()]}`,
+        title: `${field} updated to: ${result.value[updatedField]}`,
         confirmButtonText: "Ok",
       });
       dataLoader();
@@ -57,7 +59,9 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
 
 function deleteEntity(entityType, entityId, dataLoader) {
   const token = localStorage.getItem("token");
-  const url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}Record?${entityType.toLowerCase()}Id=${entityId}`;
+  let url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}Record?${entityType.toLowerCase()}Id=${entityId}`;
+  if (entityType === "Course")
+    url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}?courseCode=${entityId}`;
 
   Swal.fire({
     title: "Are you sure?",

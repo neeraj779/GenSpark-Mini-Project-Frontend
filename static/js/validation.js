@@ -58,15 +58,28 @@ function validateSelect(field) {
 }
 
 function validateForm(entity) {
-  validateText("name");
-  validatePhone();
-  validateDOB();
-  validateEmail();
-  validateSelect("gender");
+  if (entity === "course") {
+    validateText("courseName");
+    validateText("courseCode");
+    validateText("courseCredit");
+  }
+
+  if (entity === "teacher") {
+    validateText("name");
+    validatePhone();
+    validateDOB();
+    validateEmail();
+    validateSelect("gender");
+  }
 
   if (entity === "student") {
-    validateText("department");
+    validateText("name");
     validateText("rollno");
+    validateText("department");
+    validatePhone();
+    validateDOB();
+    validateEmail();
+    validateSelect("gender");
     validateSelect("status");
   }
 
