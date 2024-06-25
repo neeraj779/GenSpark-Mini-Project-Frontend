@@ -1,0 +1,48 @@
+.nav-cus {
+    background: rgb(2, 0, 36);
+    background: -moz-linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgba(9, 9, 121, 1) 35%,
+            rgba(42, 42, 114, 1) 100%);
+    background: -webkit-linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgba(9, 9, 121, 1) 35%,
+            rgba(42, 42, 114, 1) 100%);
+    background: linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgba(9, 9, 121, 1) 35%,
+            rgba(42, 42, 114, 1) 100%);
+}
+
+.nav-pad {
+    padding: 0.5rem 1rem;
+}
+
+.navbar {
+    background-color: #3498db;
+}
+
+.navbar-brand {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #1abc9c;
+}
+
+.navbar {
+    padding: 10px;
+}
+
+.navbar-nav {
+    margin-right: auto;
+}
+
+.navbar {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
