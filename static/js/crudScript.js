@@ -24,6 +24,11 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
     showCancelButton: true,
     confirmButtonText: `Update ${field}`,
     showLoaderOnConfirm: true,
+    inputValidator: (value) => {
+      if (!value) {
+        return `${field} cannot be empty!`;
+      }
+    },
     preConfirm: async (value) => {
       try {
         const response = await fetch(url, {
