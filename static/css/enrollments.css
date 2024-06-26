@@ -143,6 +143,20 @@ body {
 }
 
 
+.student-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.student-info strong {
+    color: #2c3e50;
+}
+
+.student-info {
+    line-height: 1.6;
+}
+
+
 @media (max-width: 768px) {
     .card {
         max-width: 100%;

@@ -110,7 +110,7 @@ async function getStudentDetails(studentId) {
     );
 
     if (data !== -1) {
-      console.log(data);
+      showStudentInfo(data);
     }
   } catch (error) {
     console.error("Error fetching Student Details:", error);
@@ -118,6 +118,30 @@ async function getStudentDetails(studentId) {
       "Error fetching Student Details. Please try again later."
     );
   }
+}
+
+function showStudentInfo(student) {
+  Swal.fire({
+    title: "Student Information",
+    html: `
+        <div class="student-info">
+          <p><strong>Student ID:</strong> ${student.studentId}</p>
+          <p><strong>Full Name:</strong> ${student.fullName}</p>
+          <p><strong>Roll No:</strong> ${student.rollNo}</p>
+          <p><strong>Department:</strong> ${student.department}</p>
+          <p><strong>Gender:</strong> ${student.gender}</p>
+          <p><strong>Date of Birth:</strong> ${new Date(
+            student.dateOfBirth
+          ).toLocaleDateString()}</p>
+          <p><strong>Email:</strong> ${student.email}</p>
+          <p><strong>Phone:</strong> ${student.phone}</p>
+          <p><strong>Status:</strong> ${student.status}</p>
+        </div>
+      `,
+    icon: "info",
+    confirmButtonText: "OK",
+    background: "#f7f9fb",
+  });
 }
 
 loadEnrollments();
