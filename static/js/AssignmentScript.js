@@ -107,10 +107,10 @@ function createAssignmentCard(assignment) {
         }</span><br />
     </div>
     <div class="footer">
-        <button type="button" class="action" onclick="getStudentDetails(${
+        <button type="button" class="action" onclick="UpdateAssignmentDueDate(${
           assignment.assignmentId
         })">Update Due Date</button>
-        <button class="btn-unenroll" onclick="unenrollStudentHandler(${
+        <button class="btn-unenroll" onclick="deleteAssignment(${
           assignment.assignmentId
         }, '${assignment.courseCode}')">
         <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon">
@@ -144,7 +144,7 @@ async function createAssignmentForm() {
     <div class="error" id="titleError"></div>
     </div>
     <div class="form-group">
-      <label class="form-label mt-3" for="courseCode">Course:</label>
+      <label class="form-label mt-3" for="courseCode">Select a Course:</label>
       <select class="form-select" id="courseCode" name="courseCode" onblur="validateSelect("courseCode")">
       <option value="None" selected disabled>Please select a course</option>
         ${courseOptions}
@@ -226,6 +226,14 @@ async function addNewAssignment(assignment) {
       text: "It seems we couldn't add the Assignment. Please try again later. it might be a network issue.",
     });
   }
+}
+
+function UpdateAssignmentDueDate(id) {
+  updateEntityField("Assignment", id, "DueDate", loadAssignments);
+}
+
+function deleteAssignment(id) {
+  deleteEntity("Assignment", id, loadAssignments);
 }
 
 loadAssignments();

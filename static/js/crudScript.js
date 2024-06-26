@@ -4,7 +4,14 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
 
   return Swal.fire({
     title: `Update ${field}`,
-    input: field === "Email" ? "email" : field === "Status" ? "select" : "text",
+    input:
+      field === "Email"
+        ? "email"
+        : field === "Status"
+        ? "select"
+        : field === "DueDate"
+        ? "date"
+        : "text",
     inputOptions: {
       Undergraduate: "Undergraduate",
       Postgraduate: "Postgraduate",
@@ -37,24 +44,22 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ id: entityId, [field.toLowerCase()]: value }),
+          body: generateUpdateBody(entityType, entityId, field, value),
         });
         if (!response.ok) {
           const error = await response.json();
           return Swal.showValidationMessage(`${JSON.stringify(error.errors)}`);
         }
-        return response.json();
+        return value;
       } catch (error) {
         Swal.showValidationMessage(`Request failed: ${error}`);
       }
     },
     allowOutsideClick: () => !Swal.isLoading(),
   }).then((result) => {
-    let updatedField = field.toLowerCase();
-    if (field === "CreditHours") updatedField = "courseCredit";
     if (result.isConfirmed) {
       Swal.fire({
-        title: `${field} updated to: ${result.value[updatedField]}`,
+        title: `${field} updated to: ${result.value}`,
         confirmButtonText: "Ok",
       });
       dataLoader();
@@ -62,11 +67,19 @@ async function updateEntityField(entityType, entityId, field, dataLoader) {
   });
 }
 
+function generateUpdateBody(entityType, entityId, field, value) {
+  if (entityType === "Assignment")
+    return JSON.stringify({ assignmentId: entityId, assignmentDueDate: value });
+  return JSON.stringify({ id: entityId, [field.toLowerCase()]: value });
+}
+
 function deleteEntity(entityType, entityId, dataLoader) {
   const token = localStorage.getItem("token");
   let url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}Record?${entityType.toLowerCase()}Id=${entityId}`;
   if (entityType === "Course")
     url = `http://localhost:5172/api/v1/${entityType}/Delete${entityType}?courseCode=${entityId}`;
+  if (entityType === "Assignment")
+    url = `http://localhost:5172/api/v1/${entityType}/DeleteAssignment?assignmentId=${entityId}`;
 
   Swal.fire({
     title: "Are you sure?",
