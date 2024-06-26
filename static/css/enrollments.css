@@ -4,6 +4,14 @@ body {
     background-color: #f5f5f5;
 }
 
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-top: 50px;
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -97,13 +105,13 @@ body {
     color: #425675;
 }
 
-.btn {
+.btn-unenroll {
     background-color: transparent;
     position: relative;
     border: none;
 }
 
-.btn::after {
+.btn-unenroll::after {
     content: 'Unenroll';
     position: absolute;
     top: -130%;
@@ -128,15 +136,15 @@ body {
     transition: .2s linear;
 }
 
-.btn:hover>.icon {
+.btn-unenroll:hover>.icon {
     transform: scale(1.5);
 }
 
-.btn:hover>.icon path {
+.btn-unenroll:hover>.icon path {
     fill: rgb(168, 7, 7);
 }
 
-.btn:hover::after {
+.btn-unenroll:hover::after {
     visibility: visible;
     opacity: 1;
     top: -160%;
@@ -156,6 +164,20 @@ body {
     line-height: 1.6;
 }
 
+.error {
+    color: red;
+    font-size: 0.875em;
+}
+
+.valid-input {
+    border-color: green;
+    box-shadow: 0 0 6px green;
+}
+
+.invalid-input {
+    border-color: red;
+    box-shadow: 0 0 6px red;
+}
 
 @media (max-width: 768px) {
     .card {

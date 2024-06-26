@@ -83,6 +83,11 @@ function validateForm(entity) {
     validateSelect("status");
   }
 
+  if (entity === "enrollment") {
+    validateSelect("studentId");
+    validateSelect("courseCode");
+  }
+
   const errors = document.querySelectorAll(".error");
   let formValid = true;
   errors.forEach((error) => {
