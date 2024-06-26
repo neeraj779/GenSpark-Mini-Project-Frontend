@@ -148,7 +148,7 @@ function CreateAddTeacherForm() {
             class="form-control"
             id="dob"
             name="dob"
-            onblur="validateDOB()"
+            onblur="validateDate("dob)"
           />
           <div class="error" id="dobError"></div>
         </div>

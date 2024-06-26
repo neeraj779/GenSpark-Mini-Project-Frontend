@@ -30,12 +30,12 @@ function validatePhone() {
   );
 }
 
-function validateDOB() {
+function validateDate(field) {
   validateField(
-    "dob",
-    "dobError",
+    field,
+    `${field}Error`,
     (value) => value !== "",
-    "Date of birth is required."
+    `${field} is required.`
   );
 }
 
@@ -67,7 +67,7 @@ function validateForm(entity) {
   if (entity === "teacher") {
     validateText("name");
     validatePhone();
-    validateDOB();
+    validateDate("dob");
     validateEmail();
     validateSelect("gender");
   }
@@ -77,7 +77,7 @@ function validateForm(entity) {
     validateText("rollno");
     validateText("department");
     validatePhone();
-    validateDOB();
+    validateDate("dob");
     validateEmail();
     validateSelect("gender");
     validateSelect("status");
@@ -85,6 +85,12 @@ function validateForm(entity) {
 
   if (entity === "enrollment") {
     validateSelect("studentId");
+    validateSelect("courseCode");
+  }
+
+  if (entity == "assignment") {
+    validateText("title");
+    validateDate("dueDate");
     validateSelect("courseCode");
   }
 

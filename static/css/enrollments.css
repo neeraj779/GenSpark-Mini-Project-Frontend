@@ -112,7 +112,7 @@ body {
 }
 
 .btn-unenroll::after {
-    content: 'Unenroll';
+    content: 'Delete';
     position: absolute;
     top: -130%;
     left: 50%;
