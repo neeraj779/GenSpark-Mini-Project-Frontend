@@ -116,6 +116,10 @@ function validateForm(entity) {
     validateFile("assignmentfile");
   }
 
+  if (entity === "SubmitAssignment") {
+    validateFile("assignmentfile");
+  }
+
   const errors = document.querySelectorAll(".error");
   let formValid = true;
   errors.forEach((error) => {
