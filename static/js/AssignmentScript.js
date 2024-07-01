@@ -37,6 +37,7 @@ async function fetchApi(url, options = {}, returnType = "json") {
     }
   }
   if (returnType === "text") return response.text();
+  if (returnType === "blob") return response.blob();
   return response.json();
 }
 
@@ -102,15 +103,22 @@ function createAssignmentCard(assignment) {
         <span class="card-text">Course Code: ${
           assignment.courseCode
         }</span><br />
-        <span class="card-text">Assignment Date: ${
+        <span class="card-text">Due Date: ${
           assignment.assignmentDueDate.split("T")[0]
-        }</span><br />
+        }
+        <a
+            class="edit-btn"
+            onclick="UpdateAssignmentDueDate(${assignment.assignmentId})"
+          >
+        <i class="fas fa-edit"></i> </a>
+        </span>
+        <br />
     </div>
     <div class="footer">
-        <button type="button" class="action" onclick="UpdateAssignmentDueDate(${
+        <button type="button" class="action" onclick="downloadAssignment(${
           assignment.assignmentId
-        })">Update Due Date</button>
-        <button class="btn-unenroll" onclick="deleteAssignment(${
+        })">Download Assignment</button>
+        <button class="btn-unenroll" onclick="UpdateAssignmentDueDate(${
           assignment.assignmentId
         }, '${assignment.courseCode}')">
         <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon">
@@ -161,6 +169,17 @@ async function createAssignmentForm() {
         onblur="validateDate('dueDate')"
         />
     <div class="error" id="dueDateError"></div>
+    <div class="form-group">
+        <label class="form-label mt-3" for="assignmentfile">Upload Assignment</label>
+        <input
+        type="file"
+        class="form-control"
+        id="assignmentfile"
+        name="assignmentfile"
+        accept=".pdf"
+        onblur="validateFile('assignmentfile')"
+        />
+    <div class="error" id="assignmentfileError"></div>
     </div>
     </form>`;
 }
@@ -179,6 +198,7 @@ async function openAddAssignmentModal() {
       const title = popup.querySelector("#title").value;
       const courseCode = popup.querySelector("#courseCode").value;
       const assignmentDueDate = popup.querySelector("#dueDate").value;
+      const assignmentFile = popup.querySelector("#assignmentfile").files[0];
 
       if (validateForm("assignment") === false) {
         Swal.showValidationMessage(
@@ -186,11 +206,13 @@ async function openAddAssignmentModal() {
         );
       }
 
-      return {
-        title,
-        courseCode,
-        assignmentDueDate,
-      };
+      const formData = new FormData();
+      formData.append("Title", title);
+      formData.append("CourseCode", courseCode);
+      formData.append("assignmentDueDate", assignmentDueDate);
+      formData.append("File", assignmentFile);
+
+      return formData;
     },
   }).then((result) => {
     if (result.isConfirmed) {
@@ -206,13 +228,8 @@ async function addNewAssignment(assignment) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        title: assignment.title,
-        courseCode: assignment.courseCode,
-        assignmentDueDate: assignment.assignmentDueDate,
-      }),
+      body: assignment,
     });
     if (response !== -1) {
       console.log(response);
@@ -224,6 +241,40 @@ async function addNewAssignment(assignment) {
       icon: "error",
       title: "Oops... we ran into some trouble 🥲",
       text: "It seems we couldn't add the Assignment. Please try again later. it might be a network issue.",
+    });
+  }
+}
+
+async function downloadAssignment(assignmentId) {
+  try {
+    let response = await fetchApi(
+      `${apiUrl}/GetAssignmentFile?assignmentId=${assignmentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      "blob"
+    );
+    if (response !== -1) {
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `assignment_${assignmentId}.pdf`;
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      Swal.fire("Success", "Assignment downloaded successfully.", "success");
+    }
+  } catch (error) {
+    console.error("Error downloading Assignment:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Oops... we ran into some trouble 🥲",
+      text: "It seems we couldn't download the Assignment. Please try again later. it might be a network issue.",
     });
   }
 }

@@ -57,6 +57,27 @@ function validateSelect(field) {
   );
 }
 
+function validateFile(field) {
+  let errorMsg = `${field} is required.`;
+
+  const validationFunction = () => {
+    const file = document.getElementById("assignmentfile").files[0];
+    if (!file) {
+      errorMsg = `${field} is required.`;
+      return false;
+    } else if (file.type !== "application/pdf") {
+      console.log(file.type);
+      errorMsg = "Only PDF files are allowed.";
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  validationFunction();
+  validateField(field, `${field}Error`, validationFunction, errorMsg);
+}
+
 function validateForm(entity) {
   if (entity === "course") {
     validateText("courseName");
@@ -92,6 +113,7 @@ function validateForm(entity) {
     validateText("title");
     validateDate("dueDate");
     validateSelect("courseCode");
+    validateFile("assignmentfile");
   }
 
   const errors = document.querySelectorAll(".error");
