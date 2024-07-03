@@ -82,7 +82,7 @@
       <h1 class="text-center mb-4">Teacher Management System</h1>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageTeachersCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Teacher</h5>
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageStudentsCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Student</h5>
@@ -106,17 +106,17 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageCoursesCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Courses</h5>
-              <p class="card-text">Manage all the courses in the system.</p>
+              <p class="card-text">View and manage all the available courses in the system.</p>
               <a href="Courses.html" class="btn btn-danger btn-home">Manage</a>
             </div>
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageEnrollmentsCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Enrollments</h5>
@@ -128,7 +128,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageAssignmentsCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Assignments</h5>
@@ -140,7 +140,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4" id="manageAssignmentsSubCard">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Submit Assignment</h5>
@@ -165,5 +165,16 @@
       crossorigin="anonymous"
     ></script>
     <script src="../static/js/auth.js"></script>
+    <script>
+      $(document).ready(function () {
+        const userRole = localStorage.getItem("role");
+        if (userRole === "Student") {
+          document.getElementById("manageTeachersCard").style.display = "none";
+          document.getElementById("manageStudentsCard").style.display = "none";
+          document.getElementById("manageEnrollmentsCard").style.display =
+            "none";
+        }
+      });
+    </script>
   </body>
 </html>

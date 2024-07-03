@@ -76,7 +76,11 @@
     </nav>
     <div class="container mt-5 mb-5">
       <h1 class="text-center mb-4">All Assignment</h1>
-      <button class="btn btn-success mb-4" onclick="openAddAssignmentModal()">
+      <button
+        class="btn btn-success mb-4"
+        id="addAssignmentBtn"
+        onclick="openAddAssignmentModal()"
+      >
         Add New Assignment
       </button>
       <div class="card-container" id="assignment-list"></div>
@@ -91,5 +95,14 @@
     <script src="../static/js/crudScript.js"></script>
     <script src=".././static/js/AssignmentScript.js"></script>
     <script src=".././static/js/validation.js"></script>
+    <script>
+      $(document).ready(function () {
+        let addbtn = document.getElementById("addAssignmentBtn");
+        let role = localStorage.getItem("role");
+        if (role === "Student") {
+          addbtn.style.display = "none";
+        }
+      });
+    </script>
   </body>
 </html>

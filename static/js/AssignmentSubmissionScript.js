@@ -85,7 +85,28 @@ function displayErrorMessage(message) {
   });
 }
 
-function createAssignmentCard(assignment) {
+async function isAlreadySubmitted(assignmentId) {
+  try {
+    const response = await fetch(
+      `${apiUrl}/GetSubmittedAssignmentStatus?assignmentId=${assignmentId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.status;
+  } catch (error) {
+    console.error("Error fetching Assignments:", error);
+    displayErrorMessage("Error fetching Assignments. Please try again later.");
+  }
+}
+
+async function createAssignmentCard(assignment) {
+  let isSubmitted = await isAlreadySubmitted(assignment.assignmentId);
+  if (isSubmitted === 200) return;
   const AssignmentCard = document.createElement("div");
   AssignmentCard.className = "card";
   AssignmentCard.innerHTML = `

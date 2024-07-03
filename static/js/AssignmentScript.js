@@ -85,6 +85,8 @@ function displayErrorMessage(message) {
 }
 
 function createAssignmentCard(assignment) {
+  const role = localStorage.getItem('role');
+
   const AssignmentCard = document.createElement("div");
   AssignmentCard.className = "card";
   AssignmentCard.innerHTML = `
@@ -106,11 +108,13 @@ function createAssignmentCard(assignment) {
         <span class="card-text">Due Date: ${
           assignment.assignmentDueDate.split("T")[0]
         }
+        ${role !== 'Student' ? `
         <a
             class="edit-btn"
             onclick="UpdateAssignmentDueDate(${assignment.assignmentId})"
           >
         <i class="fas fa-edit"></i> </a>
+        ` : ''}
         </span>
         <br />
     </div>
@@ -118,6 +122,7 @@ function createAssignmentCard(assignment) {
         <button type="button" class="action" onclick="downloadAssignment(${
           assignment.assignmentId
         })">Download Assignment</button>
+        ${role !== 'Student' ? `
         <button class="btn-unenroll" onclick="UpdateAssignmentDueDate(${
           assignment.assignmentId
         }, '${assignment.courseCode}')">
@@ -125,6 +130,7 @@ function createAssignmentCard(assignment) {
         <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
         </svg>
         </button>
+        ` : ''}
     </div>`;
   document.getElementById("assignment-list").appendChild(AssignmentCard);
 }

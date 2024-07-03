@@ -10,7 +10,6 @@ function checkAuth() {
   }
 }
 
-
 function handleLogout() {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
@@ -19,10 +18,23 @@ function handleLogout() {
 
 window.onload = checkAuth;
 
-
 const logoutButton = document.getElementById("logoutButton");
 if (logoutButton) {
   logoutButton.addEventListener("click", function () {
     handleLogout();
   });
 }
+
+function manageNavLinks() {
+  const userRole = localStorage.getItem("role");
+  if (userRole === "Student") {
+    document.querySelector('a[href="Teachers.html"]').style.display = "none";
+    document.querySelector('a[href="Students.html"]').style.display = "none";
+    document.querySelector('a[href="Enrollments.html"]').style.display = "none";
+  }
+}
+
+window.onload = function () {
+  checkAuth();
+  manageNavLinks();
+};

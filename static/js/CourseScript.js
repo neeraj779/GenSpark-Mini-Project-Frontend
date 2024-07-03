@@ -60,6 +60,8 @@ function displayErrorMessage(message) {
 }
 
 function createCourseCard(course) {
+  const role = localStorage.getItem('role');
+  
   const CourseCard = document.createElement("div");
   CourseCard.className = "card";
   CourseCard.innerHTML = `
@@ -68,21 +70,26 @@ function createCourseCard(course) {
         <div class="card-content">
             <div class="course-name">${course.courseName}</div>
             <div class="course-code">Course Code: ${course.courseCode}</div>
-            <div class="course-credit">Credits: ${course.courseCredit} 
-            <a class="edit-btn"
+            <div class="course-credit">Credits: ${course.courseCredit}
+            ${role !== 'Student' ? `
+            <a class="edit-btn" id="edit-btn"
             onclick="UpdateCourseCreditHours('${course.courseCode}')">
             <i class="fas fa-edit"></i> </a>
+            ` : ''}
             </div>
+            ${role !== 'Student' ? `
             <button
             class="btn btn-danger"
             onclick="deleteCourse('${course.courseCode}')"
-          >
+            >
             Delete
-          </button>
+            </button>
+            ` : ''}
         </div>
     </div>`;
   document.getElementById("courses-list").appendChild(CourseCard);
 }
+
 
 function UpdateCourseCreditHours(id) {
   updateEntityField("Course", id, "CreditHours", loadCourses);
