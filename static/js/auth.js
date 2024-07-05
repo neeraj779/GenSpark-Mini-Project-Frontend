@@ -32,6 +32,10 @@ function manageNavLinks() {
     document.querySelector('a[href="Students.html"]').style.display = "none";
     document.querySelector('a[href="Enrollments.html"]').style.display = "none";
   }
+  if (userRole === "Admin") {
+    document.querySelector('a[href="AssignmentSubmisson.html"]').style.display =
+      "none";
+  }
 }
 
 window.onload = function () {
