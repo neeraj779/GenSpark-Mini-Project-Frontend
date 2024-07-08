@@ -110,7 +110,9 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Manage Courses</h5>
-              <p class="card-text">View and manage all the available courses in the system.</p>
+              <p class="card-text">
+                View and manage all the available courses in the system.
+              </p>
               <a href="Courses.html" class="btn btn-danger btn-home">Manage</a>
             </div>
           </div>
@@ -174,8 +176,15 @@
           document.getElementById("manageEnrollmentsCard").style.display =
             "none";
         }
-        if(userRole === "Admin"){
-          document.getElementById("manageAssignmentsSubCard").style.display = "none";
+        if (userRole === "Admin") {
+          document.getElementById("manageAssignmentsSubCard").style.display =
+            "none";
+        }
+
+        if (userRole === "Teacher") {
+          document.getElementById("manageTeachersCard").style.display = "none";
+          document.getElementById("manageAssignmentsSubCard").style.display =
+            "none";
         }
       });
     </script>

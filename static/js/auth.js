@@ -36,6 +36,12 @@ function manageNavLinks() {
     document.querySelector('a[href="AssignmentSubmisson.html"]').style.display =
       "none";
   }
+
+  if (userRole === "Teacher") {
+    document.querySelector('a[href="Teachers.html"]').style.display = "none";
+    document.querySelector('a[href="AssignmentSubmisson.html"]').style.display =
+      "none";
+  }
 }
 
 window.onload = function () {
