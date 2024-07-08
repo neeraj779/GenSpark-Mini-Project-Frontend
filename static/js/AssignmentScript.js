@@ -78,8 +78,7 @@ async function loadAssignments() {
 
 function displayErrorMessage(message) {
   Swal.fire({
-    icon: "error",
-    title: "Oops... we ran into some trouble 🥲",
+    icon: "info",
     text: message,
   });
 }
