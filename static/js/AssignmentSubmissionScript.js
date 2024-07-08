@@ -105,11 +105,10 @@ async function isAlreadySubmitted(assignmentId) {
 
 async function createAssignmentCard(assignment) {
   let isSubmitted = await isAlreadySubmitted(assignment.assignmentId);
-  let isEmpty = true;
-  if (isSubmitted !== 200) {
-    const AssignmentCard = document.createElement("div");
-    AssignmentCard.className = "card";
-    AssignmentCard.innerHTML = `
+  if (isSubmitted === 200) return;
+  const AssignmentCard = document.createElement("div");
+  AssignmentCard.className = "card";
+  AssignmentCard.innerHTML = `
     <div class="header">
         <img
         src=".././assets/img/assignment.jpg"
@@ -150,13 +149,9 @@ async function createAssignmentCard(assignment) {
         </button>
 
     </div>`;
-    isEmpty = false;
-    document.getElementById("assignment-list").appendChild(AssignmentCard);
-  }
-  if (isEmpty)
-    displayErrorMessage(
-      "No Assignments available for submission at the moment."
-    );
+  document.getElementById("assignment-list").appendChild(AssignmentCard);
+  let alertDiv = document.getElementById("alert");
+  alertDiv.style.display = "none";
 }
 
 async function createAssignmentForm() {
@@ -220,8 +215,13 @@ async function uploadAssignment(assignment) {
     });
     if (response !== -1) {
       console.log(response);
-      Swal.fire("Success", "Assignment added successfully.", "success");
-      loadAssignments();
+      Swal.fire("Success", "Assignment added successfully.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            location.reload();
+          }
+        }
+      );
     }
   } catch (error) {
     Swal.fire({
