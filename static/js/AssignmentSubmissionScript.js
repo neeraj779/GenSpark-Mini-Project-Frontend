@@ -79,8 +79,7 @@ async function loadAssignments() {
 
 function displayErrorMessage(message) {
   Swal.fire({
-    icon: "error",
-    title: "Oops... we ran into some trouble 🥲",
+    icon: "info",
     text: message,
   });
 }
@@ -106,10 +105,11 @@ async function isAlreadySubmitted(assignmentId) {
 
 async function createAssignmentCard(assignment) {
   let isSubmitted = await isAlreadySubmitted(assignment.assignmentId);
-  if (isSubmitted === 200) return;
-  const AssignmentCard = document.createElement("div");
-  AssignmentCard.className = "card";
-  AssignmentCard.innerHTML = `
+  let isEmpty = true;
+  if (isSubmitted !== 200) {
+    const AssignmentCard = document.createElement("div");
+    AssignmentCard.className = "card";
+    AssignmentCard.innerHTML = `
     <div class="header">
         <img
         src=".././assets/img/assignment.jpg"
@@ -150,7 +150,13 @@ async function createAssignmentCard(assignment) {
         </button>
 
     </div>`;
-  document.getElementById("assignment-list").appendChild(AssignmentCard);
+    isEmpty = false;
+    document.getElementById("assignment-list").appendChild(AssignmentCard);
+  }
+  if (isEmpty)
+    displayErrorMessage(
+      "No Assignments available for submission at the moment."
+    );
 }
 
 async function createAssignmentForm() {
