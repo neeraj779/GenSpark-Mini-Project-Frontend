@@ -107,8 +107,15 @@ async function deleteCourseOffering(teacherId, courseCode) {
   const success = await performPostRequest(url);
 
   if (success) {
-    Swal.fire("Success", "CourseOffering deleted successfully!", "success");
-    loadCourseOfferings();
+    Swal.fire(
+      "Success",
+      "CourseOffering deleted successfully!",
+      "success"
+    ).then((result) => {
+      if (result.isConfirmed) {
+        location.reload();
+      }
+    });
   }
 }
 
@@ -212,8 +219,13 @@ async function addNewCourseOffering(courseOffering) {
   const success = await performPostRequest(url);
 
   if (success) {
-    Swal.fire("Success", "CourseOffering added successfully!", "success");
-    loadCourseOfferings();
+    Swal.fire("Success", "CourseOffering added successfully!", "success").then(
+      (result) => {
+        if (result.isConfirmed) {
+          location.reload();
+        }
+      }
+    );
   }
 }
 
