@@ -120,6 +120,15 @@ function validateForm(entity) {
     validateFile("assignmentfile");
   }
 
+  if (entity === "newCourseOffering") {
+    validateSelect("teacherId");
+    validateSelect("courseCode");
+  }
+
+  if (entity === "updateCourseOffering") {
+    validateSelect("teacherId");
+  }
+
   const errors = document.querySelectorAll(".error");
   let formValid = true;
   errors.forEach((error) => {
