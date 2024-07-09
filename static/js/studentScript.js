@@ -301,4 +301,22 @@ async function addNewstudent(student) {
   }
 }
 
+function searchStudents() {
+  const searchInput = document
+    .getElementById("search-input")
+    .value.toLowerCase();
+  const students = document.querySelectorAll("#students-list .card");
+
+  students.forEach((teacher) => {
+    const name = teacher
+      .querySelector(".card__title")
+      .textContent.toLowerCase();
+    if (name.includes(searchInput)) {
+      teacher.parentElement.style.display = "block";
+    } else {
+      teacher.parentElement.style.display = "none";
+    }
+  });
+}
+
 loadStudents();

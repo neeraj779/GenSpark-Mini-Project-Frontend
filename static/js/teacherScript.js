@@ -244,4 +244,22 @@ async function addNewTeacher(teacher) {
   }
 }
 
+function searchTeachers() {
+  const searchInput = document
+    .getElementById("search-input")
+    .value.toLowerCase();
+  const teachers = document.querySelectorAll("#teachers-list .card");
+
+  teachers.forEach((teacher) => {
+    const name = teacher
+      .querySelector(".card__title")
+      .textContent.toLowerCase();
+    if (name.includes(searchInput)) {
+      teacher.parentElement.style.display = "block";
+    } else {
+      teacher.parentElement.style.display = "none";
+    }
+  });
+}
+
 loadTeachers();

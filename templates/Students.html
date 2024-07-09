@@ -76,6 +76,23 @@
     </nav>
     <div class="container mt-5">
       <h1 class="text-center mb-4">All students</h1>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="search-input"
+            class="form-control"
+            placeholder="Search student by name"
+          />
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-primary" onclick="searchStudents()">
+            Search
+          </button>
+        </div>
+      </div>
+
       <button class="btn btn-success mb-4" onclick="openAddStudentModal()">
         Add New Student
       </button>
