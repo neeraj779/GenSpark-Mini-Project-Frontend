@@ -112,8 +112,11 @@ function deleteEntity(entityType, entityId, dataLoader) {
             text: `Your ${entityType.toLowerCase()} has been deleted.`,
             icon: "success",
             confirmButtonText: "Ok",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
           });
-          dataLoader();
         })
         .catch((error) => {
           console.error(`Error deleting ${entityType.toLowerCase()}:`, error);
